@@ -373,7 +373,6 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				DescribeTriggerRequest.Constant.MODULE,
 				DescribeTriggerRequest.Constant.FUNCTION);
 
-        get.setHeader("X-GS2-ACCESS-TOKEN", request.getAccessToken());
 
 		return doRequest(get, DescribeTriggerResult.class);
 
