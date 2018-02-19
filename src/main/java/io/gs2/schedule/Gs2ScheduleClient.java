@@ -84,6 +84,9 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				CreateEventMasterRequest.Constant.MODULE,
 				CreateEventMasterRequest.Constant.FUNCTION,
 				body.toString());
+        if(request.getRequestId() != null) {
+            post.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
 
 
 		return doRequest(post, CreateEventMasterResult.class);
@@ -114,6 +117,9 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				CreateScheduleRequest.Constant.MODULE,
 				CreateScheduleRequest.Constant.FUNCTION,
 				body.toString());
+        if(request.getRequestId() != null) {
+            post.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
 
 
 		return doRequest(post, CreateScheduleResult.class);
@@ -141,8 +147,10 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				ENDPOINT,
 				DeleteEventMasterRequest.Constant.MODULE,
 				DeleteEventMasterRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            delete.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
 
-        delete.setHeader("X-GS2-ACCESS-TOKEN", request.getAccessToken());
 
 		doRequest(delete, null);
 
@@ -169,6 +177,9 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				ENDPOINT,
 				DeleteScheduleRequest.Constant.MODULE,
 				DeleteScheduleRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            delete.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
 
 
 		doRequest(delete, null);
@@ -196,8 +207,10 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				ENDPOINT,
 				DeleteTriggerRequest.Constant.MODULE,
 				DeleteTriggerRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            delete.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
 
-        delete.setHeader("X-GS2-ACCESS-TOKEN", request.getAccessToken());
 
 		doRequest(delete, null);
 
@@ -231,6 +244,9 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				ENDPOINT,
 				DescribeEventRequest.Constant.MODULE,
 				DescribeEventRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
 
         get.setHeader("X-GS2-ACCESS-TOKEN", request.getAccessToken());
 
@@ -266,6 +282,9 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				ENDPOINT,
 				DescribeEventByUserIdRequest.Constant.MODULE,
 				DescribeEventByUserIdRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
 
 
 		return doRequest(get, DescribeEventByUserIdResult.class);
@@ -301,8 +320,10 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				ENDPOINT,
 				DescribeEventMasterRequest.Constant.MODULE,
 				DescribeEventMasterRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
 
-        get.setHeader("X-GS2-ACCESS-TOKEN", request.getAccessToken());
 
 		return doRequest(get, DescribeEventMasterResult.class);
 
@@ -337,6 +358,9 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				ENDPOINT,
 				DescribeScheduleRequest.Constant.MODULE,
 				DescribeScheduleRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
 
 
 		return doRequest(get, DescribeScheduleResult.class);
@@ -372,6 +396,9 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				ENDPOINT,
 				DescribeTriggerRequest.Constant.MODULE,
 				DescribeTriggerRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
 
 
 		return doRequest(get, DescribeTriggerResult.class);
@@ -407,8 +434,10 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				ENDPOINT,
 				DescribeTriggerByUserIdRequest.Constant.MODULE,
 				DescribeTriggerByUserIdRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
 
-        get.setHeader("X-GS2-ACCESS-TOKEN", request.getAccessToken());
 
 		return doRequest(get, DescribeTriggerByUserIdResult.class);
 
@@ -437,6 +466,9 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				ENDPOINT,
 				ExportMasterRequest.Constant.MODULE,
 				ExportMasterRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
 
 
 		return doRequest(get, ExportMasterResult.class);
@@ -466,6 +498,9 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				ENDPOINT,
 				GetCurrentEventMasterRequest.Constant.MODULE,
 				GetCurrentEventMasterRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
 
 
 		return doRequest(get, GetCurrentEventMasterResult.class);
@@ -495,6 +530,9 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				ENDPOINT,
 				GetEventRequest.Constant.MODULE,
 				GetEventRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
 
         get.setHeader("X-GS2-ACCESS-TOKEN", request.getAccessToken());
 
@@ -525,6 +563,9 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				ENDPOINT,
 				GetEventByUserIdRequest.Constant.MODULE,
 				GetEventByUserIdRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
 
 
 		return doRequest(get, GetEventByUserIdResult.class);
@@ -554,6 +595,9 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				ENDPOINT,
 				GetEventMasterRequest.Constant.MODULE,
 				GetEventMasterRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
 
 
 		return doRequest(get, GetEventMasterResult.class);
@@ -583,6 +627,9 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				ENDPOINT,
 				GetScheduleRequest.Constant.MODULE,
 				GetScheduleRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
 
 
 		return doRequest(get, GetScheduleResult.class);
@@ -612,6 +659,9 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				ENDPOINT,
 				GetScheduleStatusRequest.Constant.MODULE,
 				GetScheduleStatusRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
 
 
 		return doRequest(get, GetScheduleStatusResult.class);
@@ -641,6 +691,9 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				ENDPOINT,
 				GetTriggerRequest.Constant.MODULE,
 				GetTriggerRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
 
 
 		return doRequest(get, GetTriggerResult.class);
@@ -671,6 +724,9 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				PullTriggerRequest.Constant.MODULE,
 				PullTriggerRequest.Constant.FUNCTION,
 				body.toString());
+        if(request.getRequestId() != null) {
+            put.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
 
 
 		return doRequest(put, PullTriggerResult.class);
@@ -700,6 +756,9 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				UpdateCurrentEventMasterRequest.Constant.MODULE,
 				UpdateCurrentEventMasterRequest.Constant.FUNCTION,
 				body.toString());
+        if(request.getRequestId() != null) {
+            post.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
 
 
 		return doRequest(post, UpdateCurrentEventMasterResult.class);
@@ -734,8 +793,10 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				UpdateEventMasterRequest.Constant.MODULE,
 				UpdateEventMasterRequest.Constant.FUNCTION,
 				body.toString());
+        if(request.getRequestId() != null) {
+            put.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
 
-        put.setHeader("X-GS2-ACCESS-TOKEN", request.getAccessToken());
 
 		return doRequest(put, UpdateEventMasterResult.class);
 
@@ -764,6 +825,9 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 				UpdateScheduleRequest.Constant.MODULE,
 				UpdateScheduleRequest.Constant.FUNCTION,
 				body.toString());
+        if(request.getRequestId() != null) {
+            put.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
 
 
 		return doRequest(put, UpdateScheduleResult.class);
