@@ -19,13 +19,13 @@ package io.gs2.schedule.control;
 import org.json.JSONObject;
 import java.util.List;
 import io.gs2.schedule.Gs2Schedule;
-import io.gs2.control.Gs2UserRequest;
+import io.gs2.control.Gs2BasicRequest;
 
 /**
  * @author Game Server Services, Inc.
  */
 @SuppressWarnings("serial")
-public class DescribeEventMasterRequest extends Gs2UserRequest<DescribeEventMasterRequest> {
+public class DescribeEventMasterRequest extends Gs2BasicRequest<DescribeEventMasterRequest> {
 
 	public static class Constant extends Gs2Schedule.Constant {
 		public static final String FUNCTION = "DescribeEventMaster";

@@ -18,7 +18,9 @@ package io.gs2.schedule;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import io.gs2.model.Region;
 import io.gs2.util.EncodingUtil;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.methods.HttpDelete;
@@ -55,6 +57,90 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 		super(credential);
 	}
 
+	/**
+	 * コンストラクタ。
+	 *
+	 * @param credential 認証情報
+	 * @param region リージョン
+	 */
+	public Gs2ScheduleClient(IGs2Credential credential, Region region) {
+		super(credential, region);
+	}
+
+	/**
+	 * コンストラクタ。
+	 *
+	 * @param credential 認証情報
+	 * @param region リージョン
+	 */
+	public Gs2ScheduleClient(IGs2Credential credential, String region) {
+		super(credential, region);
+	}
+
+
+	/**
+	 * 現在適用されているイベントマスターを取得します<br>
+	 * <br>
+	 *
+	 * @param request リクエストパラメータ
+
+	 * @return 結果
+
+	 */
+
+	public GetCurrentEventMasterResult getCurrentEventMaster(GetCurrentEventMasterRequest request) {
+
+	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/event/master";
+
+
+
+		HttpGet get = createHttpGet(
+				url,
+				credential,
+				ENDPOINT,
+				GetCurrentEventMasterRequest.Constant.MODULE,
+				GetCurrentEventMasterRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
+
+
+		return doRequest(get, GetCurrentEventMasterResult.class);
+
+	}
+
+
+	/**
+	 * イベントマスターを更新します<br>
+	 * <br>
+	 *
+	 * @param request リクエストパラメータ
+
+	 * @return 結果
+
+	 */
+
+	public UpdateCurrentEventMasterResult updateCurrentEventMaster(UpdateCurrentEventMasterRequest request) {
+
+		ObjectNode body = JsonNodeFactory.instance.objectNode()
+				.put("settings", request.getSettings());
+
+		HttpPost post = createHttpPost(
+				Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/event/master",
+				credential,
+				ENDPOINT,
+				UpdateCurrentEventMasterRequest.Constant.MODULE,
+				UpdateCurrentEventMasterRequest.Constant.FUNCTION,
+				body.toString());
+        if(request.getRequestId() != null) {
+            post.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
+
+
+		return doRequest(post, UpdateCurrentEventMasterResult.class);
+
+	}
+
 
 	/**
 	 * イベントマスターを新規作成します<br>
@@ -71,12 +157,12 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 		ObjectNode body = JsonNodeFactory.instance.objectNode()
 				.put("name", request.getName())
 				.put("type", request.getType());
-
         if(request.getMeta() != null) body.put("meta", request.getMeta());
         if(request.getAbsoluteBegin() != null) body.put("absoluteBegin", request.getAbsoluteBegin());
         if(request.getAbsoluteEnd() != null) body.put("absoluteEnd", request.getAbsoluteEnd());
         if(request.getRelativeTriggerName() != null) body.put("relativeTriggerName", request.getRelativeTriggerName());
         if(request.getRelativeSpan() != null) body.put("relativeSpan", request.getRelativeSpan());
+
 		HttpPost post = createHttpPost(
 				Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/master/event",
 				credential,
@@ -90,39 +176,6 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 
 
 		return doRequest(post, CreateEventMasterResult.class);
-
-	}
-
-
-	/**
-	 * スケジュールを新規作成します<br>
-	 * <br>
-	 *
-	 * @param request リクエストパラメータ
-
-	 * @return 結果
-
-	 */
-
-	public CreateScheduleResult createSchedule(CreateScheduleRequest request) {
-
-		ObjectNode body = JsonNodeFactory.instance.objectNode()
-				.put("name", request.getName());
-
-        if(request.getDescription() != null) body.put("description", request.getDescription());
-		HttpPost post = createHttpPost(
-				Gs2Constant.ENDPOINT_HOST + "/schedule",
-				credential,
-				ENDPOINT,
-				CreateScheduleRequest.Constant.MODULE,
-				CreateScheduleRequest.Constant.FUNCTION,
-				body.toString());
-        if(request.getRequestId() != null) {
-            post.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
-        }
-
-
-		return doRequest(post, CreateScheduleResult.class);
 
 	}
 
@@ -158,61 +211,107 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 
 
 	/**
-	 * スケジュールを削除します<br>
+	 * イベントマスターの一覧を取得します<br>
 	 * <br>
 	 *
 	 * @param request リクエストパラメータ
 
+	 * @return 結果
+
 	 */
 
-	public void deleteSchedule(DeleteScheduleRequest request) {
+	public DescribeEventMasterResult describeEventMaster(DescribeEventMasterRequest request) {
 
-	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "";
+	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/master/event";
+
+        List<NameValuePair> queryString = new ArrayList<>();
+        if(request.getPageToken() != null) queryString.add(new BasicNameValuePair("pageToken", String.valueOf(request.getPageToken())));
+        if(request.getLimit() != null) queryString.add(new BasicNameValuePair("limit", String.valueOf(request.getLimit())));
 
 
-
-		HttpDelete delete = createHttpDelete(
+		if(queryString.size() > 0) {
+			url += "?" + URLEncodedUtils.format(queryString, "UTF-8");
+		}
+		HttpGet get = createHttpGet(
 				url,
 				credential,
 				ENDPOINT,
-				DeleteScheduleRequest.Constant.MODULE,
-				DeleteScheduleRequest.Constant.FUNCTION);
+				DescribeEventMasterRequest.Constant.MODULE,
+				DescribeEventMasterRequest.Constant.FUNCTION);
         if(request.getRequestId() != null) {
-            delete.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
         }
 
 
-		doRequest(delete, null);
+		return doRequest(get, DescribeEventMasterResult.class);
 
 	}
 
 
 	/**
-	 * トリガーを削除します<br>
+	 * イベントマスターを取得します<br>
 	 * <br>
 	 *
 	 * @param request リクエストパラメータ
 
+	 * @return 結果
+
 	 */
 
-	public void deleteTrigger(DeleteTriggerRequest request) {
+	public GetEventMasterResult getEventMaster(GetEventMasterRequest request) {
 
-	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/user/" + (request.getUserId() == null || request.getUserId().equals("") ? "null" : request.getUserId()) + "/trigger/" + (request.getTriggerName() == null || request.getTriggerName().equals("") ? "null" : request.getTriggerName()) + "";
+	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/master/event/" + (request.getEventName() == null || request.getEventName().equals("") ? "null" : request.getEventName()) + "";
 
 
 
-		HttpDelete delete = createHttpDelete(
+		HttpGet get = createHttpGet(
 				url,
 				credential,
 				ENDPOINT,
-				DeleteTriggerRequest.Constant.MODULE,
-				DeleteTriggerRequest.Constant.FUNCTION);
+				GetEventMasterRequest.Constant.MODULE,
+				GetEventMasterRequest.Constant.FUNCTION);
         if(request.getRequestId() != null) {
-            delete.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
         }
 
 
-		doRequest(delete, null);
+		return doRequest(get, GetEventMasterResult.class);
+
+	}
+
+
+	/**
+	 * イベントマスターを更新します<br>
+	 * <br>
+	 *
+	 * @param request リクエストパラメータ
+
+	 * @return 結果
+
+	 */
+
+	public UpdateEventMasterResult updateEventMaster(UpdateEventMasterRequest request) {
+
+		ObjectNode body = JsonNodeFactory.instance.objectNode()
+				.put("type", request.getType());
+        if(request.getMeta() != null) body.put("meta", request.getMeta());
+        if(request.getAbsoluteBegin() != null) body.put("absoluteBegin", request.getAbsoluteBegin());
+        if(request.getAbsoluteEnd() != null) body.put("absoluteEnd", request.getAbsoluteEnd());
+        if(request.getRelativeTriggerName() != null) body.put("relativeTriggerName", request.getRelativeTriggerName());
+        if(request.getRelativeSpan() != null) body.put("relativeSpan", request.getRelativeSpan());
+		HttpPut put = createHttpPut(
+				Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/master/event/" + (request.getEventName() == null || request.getEventName().equals("") ? "null" : request.getEventName()) + "",
+				credential,
+				ENDPOINT,
+				UpdateEventMasterRequest.Constant.MODULE,
+				UpdateEventMasterRequest.Constant.FUNCTION,
+				body.toString());
+        if(request.getRequestId() != null) {
+            put.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
+
+
+		return doRequest(put, UpdateEventMasterResult.class);
 
 	}
 
@@ -293,7 +392,7 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 
 
 	/**
-	 * イベントマスターの一覧を取得します<br>
+	 * 開催中のイベントを取得します<br>
 	 * <br>
 	 *
 	 * @param request リクエストパラメータ
@@ -302,30 +401,152 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 
 	 */
 
-	public DescribeEventMasterResult describeEventMaster(DescribeEventMasterRequest request) {
+	public GetEventResult getEvent(GetEventRequest request) {
 
-	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/master/event";
-
-        List<NameValuePair> queryString = new ArrayList<>();
-        if(request.getPageToken() != null) queryString.add(new BasicNameValuePair("pageToken", String.valueOf(request.getPageToken())));
-        if(request.getLimit() != null) queryString.add(new BasicNameValuePair("limit", String.valueOf(request.getLimit())));
+	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/event/" + (request.getEventName() == null || request.getEventName().equals("") ? "null" : request.getEventName()) + "";
 
 
-		if(queryString.size() > 0) {
-			url += "?" + URLEncodedUtils.format(queryString, "UTF-8");
-		}
+
 		HttpGet get = createHttpGet(
 				url,
 				credential,
 				ENDPOINT,
-				DescribeEventMasterRequest.Constant.MODULE,
-				DescribeEventMasterRequest.Constant.FUNCTION);
+				GetEventRequest.Constant.MODULE,
+				GetEventRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
+
+        get.setHeader("X-GS2-ACCESS-TOKEN", request.getAccessToken());
+
+		return doRequest(get, GetEventResult.class);
+
+	}
+
+
+	/**
+	 * 開催中のイベントを取得します<br>
+	 * <br>
+	 *
+	 * @param request リクエストパラメータ
+
+	 * @return 結果
+
+	 */
+
+	public GetEventByUserIdResult getEventByUserId(GetEventByUserIdRequest request) {
+
+	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/event/" + (request.getEventName() == null || request.getEventName().equals("") ? "null" : request.getEventName()) + "/user/" + (request.getUserId() == null || request.getUserId().equals("") ? "null" : request.getUserId()) + "";
+
+
+
+		HttpGet get = createHttpGet(
+				url,
+				credential,
+				ENDPOINT,
+				GetEventByUserIdRequest.Constant.MODULE,
+				GetEventByUserIdRequest.Constant.FUNCTION);
         if(request.getRequestId() != null) {
             get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
         }
 
 
-		return doRequest(get, DescribeEventMasterResult.class);
+		return doRequest(get, GetEventByUserIdResult.class);
+
+	}
+
+
+	/**
+	 * イベントマスターをエクスポートします<br>
+	 * <br>
+	 *
+	 * @param request リクエストパラメータ
+
+	 * @return 結果
+
+	 */
+
+	public ExportMasterResult exportMaster(ExportMasterRequest request) {
+
+	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/master";
+
+
+
+		HttpGet get = createHttpGet(
+				url,
+				credential,
+				ENDPOINT,
+				ExportMasterRequest.Constant.MODULE,
+				ExportMasterRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
+
+
+		return doRequest(get, ExportMasterResult.class);
+
+	}
+
+
+	/**
+	 * スケジュールを新規作成します<br>
+	 * <br>
+	 *
+	 * @param request リクエストパラメータ
+
+	 * @return 結果
+
+	 */
+
+	public CreateScheduleResult createSchedule(CreateScheduleRequest request) {
+
+		ObjectNode body = JsonNodeFactory.instance.objectNode()
+				.put("name", request.getName());
+        if(request.getDescription() != null) body.put("description", request.getDescription());
+
+		HttpPost post = createHttpPost(
+				Gs2Constant.ENDPOINT_HOST + "/schedule",
+				credential,
+				ENDPOINT,
+				CreateScheduleRequest.Constant.MODULE,
+				CreateScheduleRequest.Constant.FUNCTION,
+				body.toString());
+        if(request.getRequestId() != null) {
+            post.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
+
+
+		return doRequest(post, CreateScheduleResult.class);
+
+	}
+
+
+	/**
+	 * スケジュールを削除します<br>
+	 * <br>
+	 *
+	 * @param request リクエストパラメータ
+
+	 */
+
+	public void deleteSchedule(DeleteScheduleRequest request) {
+
+	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "";
+
+
+
+		HttpDelete delete = createHttpDelete(
+				url,
+				credential,
+				ENDPOINT,
+				DeleteScheduleRequest.Constant.MODULE,
+				DeleteScheduleRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            delete.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
+
+
+		doRequest(delete, null);
 
 	}
 
@@ -364,6 +585,131 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 
 
 		return doRequest(get, DescribeScheduleResult.class);
+
+	}
+
+
+	/**
+	 * スケジュールを取得します<br>
+	 * <br>
+	 *
+	 * @param request リクエストパラメータ
+
+	 * @return 結果
+
+	 */
+
+	public GetScheduleResult getSchedule(GetScheduleRequest request) {
+
+	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "";
+
+
+
+		HttpGet get = createHttpGet(
+				url,
+				credential,
+				ENDPOINT,
+				GetScheduleRequest.Constant.MODULE,
+				GetScheduleRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
+
+
+		return doRequest(get, GetScheduleResult.class);
+
+	}
+
+
+	/**
+	 * スケジュールの状態を取得します<br>
+	 * <br>
+	 *
+	 * @param request リクエストパラメータ
+
+	 * @return 結果
+
+	 */
+
+	public GetScheduleStatusResult getScheduleStatus(GetScheduleStatusRequest request) {
+
+	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/status";
+
+
+
+		HttpGet get = createHttpGet(
+				url,
+				credential,
+				ENDPOINT,
+				GetScheduleStatusRequest.Constant.MODULE,
+				GetScheduleStatusRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
+
+
+		return doRequest(get, GetScheduleStatusResult.class);
+
+	}
+
+
+	/**
+	 * スケジュールを更新します<br>
+	 * <br>
+	 *
+	 * @param request リクエストパラメータ
+
+	 * @return 結果
+
+	 */
+
+	public UpdateScheduleResult updateSchedule(UpdateScheduleRequest request) {
+
+		ObjectNode body = JsonNodeFactory.instance.objectNode();
+        if(request.getDescription() != null) body.put("description", request.getDescription());
+		HttpPut put = createHttpPut(
+				Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "",
+				credential,
+				ENDPOINT,
+				UpdateScheduleRequest.Constant.MODULE,
+				UpdateScheduleRequest.Constant.FUNCTION,
+				body.toString());
+        if(request.getRequestId() != null) {
+            put.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
+
+
+		return doRequest(put, UpdateScheduleResult.class);
+
+	}
+
+
+	/**
+	 * トリガーを削除します<br>
+	 * <br>
+	 *
+	 * @param request リクエストパラメータ
+
+	 */
+
+	public void deleteTrigger(DeleteTriggerRequest request) {
+
+	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/user/" + (request.getUserId() == null || request.getUserId().equals("") ? "null" : request.getUserId()) + "/trigger/" + (request.getTriggerName() == null || request.getTriggerName().equals("") ? "null" : request.getTriggerName()) + "";
+
+
+
+		HttpDelete delete = createHttpDelete(
+				url,
+				credential,
+				ENDPOINT,
+				DeleteTriggerRequest.Constant.MODULE,
+				DeleteTriggerRequest.Constant.FUNCTION);
+        if(request.getRequestId() != null) {
+            delete.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
+        }
+
+
+		doRequest(delete, null);
 
 	}
 
@@ -445,231 +791,6 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 
 
 	/**
-	 * イベントマスターをエクスポートします<br>
-	 * <br>
-	 *
-	 * @param request リクエストパラメータ
-
-	 * @return 結果
-
-	 */
-
-	public ExportMasterResult exportMaster(ExportMasterRequest request) {
-
-	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/master";
-
-
-
-		HttpGet get = createHttpGet(
-				url,
-				credential,
-				ENDPOINT,
-				ExportMasterRequest.Constant.MODULE,
-				ExportMasterRequest.Constant.FUNCTION);
-        if(request.getRequestId() != null) {
-            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
-        }
-
-
-		return doRequest(get, ExportMasterResult.class);
-
-	}
-
-
-	/**
-	 * 現在適用されているイベントマスターを取得します<br>
-	 * <br>
-	 *
-	 * @param request リクエストパラメータ
-
-	 * @return 結果
-
-	 */
-
-	public GetCurrentEventMasterResult getCurrentEventMaster(GetCurrentEventMasterRequest request) {
-
-	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/event/master";
-
-
-
-		HttpGet get = createHttpGet(
-				url,
-				credential,
-				ENDPOINT,
-				GetCurrentEventMasterRequest.Constant.MODULE,
-				GetCurrentEventMasterRequest.Constant.FUNCTION);
-        if(request.getRequestId() != null) {
-            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
-        }
-
-
-		return doRequest(get, GetCurrentEventMasterResult.class);
-
-	}
-
-
-	/**
-	 * 開催中のイベントを取得します<br>
-	 * <br>
-	 *
-	 * @param request リクエストパラメータ
-
-	 * @return 結果
-
-	 */
-
-	public GetEventResult getEvent(GetEventRequest request) {
-
-	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/event/" + (request.getEventName() == null || request.getEventName().equals("") ? "null" : request.getEventName()) + "";
-
-
-
-		HttpGet get = createHttpGet(
-				url,
-				credential,
-				ENDPOINT,
-				GetEventRequest.Constant.MODULE,
-				GetEventRequest.Constant.FUNCTION);
-        if(request.getRequestId() != null) {
-            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
-        }
-
-        get.setHeader("X-GS2-ACCESS-TOKEN", request.getAccessToken());
-
-		return doRequest(get, GetEventResult.class);
-
-	}
-
-
-	/**
-	 * 開催中のイベントを取得します<br>
-	 * <br>
-	 *
-	 * @param request リクエストパラメータ
-
-	 * @return 結果
-
-	 */
-
-	public GetEventByUserIdResult getEventByUserId(GetEventByUserIdRequest request) {
-
-	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/event/" + (request.getEventName() == null || request.getEventName().equals("") ? "null" : request.getEventName()) + "/user/" + (request.getUserId() == null || request.getUserId().equals("") ? "null" : request.getUserId()) + "";
-
-
-
-		HttpGet get = createHttpGet(
-				url,
-				credential,
-				ENDPOINT,
-				GetEventByUserIdRequest.Constant.MODULE,
-				GetEventByUserIdRequest.Constant.FUNCTION);
-        if(request.getRequestId() != null) {
-            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
-        }
-
-
-		return doRequest(get, GetEventByUserIdResult.class);
-
-	}
-
-
-	/**
-	 * イベントマスターを取得します<br>
-	 * <br>
-	 *
-	 * @param request リクエストパラメータ
-
-	 * @return 結果
-
-	 */
-
-	public GetEventMasterResult getEventMaster(GetEventMasterRequest request) {
-
-	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/master/event/" + (request.getEventName() == null || request.getEventName().equals("") ? "null" : request.getEventName()) + "";
-
-
-
-		HttpGet get = createHttpGet(
-				url,
-				credential,
-				ENDPOINT,
-				GetEventMasterRequest.Constant.MODULE,
-				GetEventMasterRequest.Constant.FUNCTION);
-        if(request.getRequestId() != null) {
-            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
-        }
-
-
-		return doRequest(get, GetEventMasterResult.class);
-
-	}
-
-
-	/**
-	 * スケジュールを取得します<br>
-	 * <br>
-	 *
-	 * @param request リクエストパラメータ
-
-	 * @return 結果
-
-	 */
-
-	public GetScheduleResult getSchedule(GetScheduleRequest request) {
-
-	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "";
-
-
-
-		HttpGet get = createHttpGet(
-				url,
-				credential,
-				ENDPOINT,
-				GetScheduleRequest.Constant.MODULE,
-				GetScheduleRequest.Constant.FUNCTION);
-        if(request.getRequestId() != null) {
-            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
-        }
-
-
-		return doRequest(get, GetScheduleResult.class);
-
-	}
-
-
-	/**
-	 * スケジュールの状態を取得します<br>
-	 * <br>
-	 *
-	 * @param request リクエストパラメータ
-
-	 * @return 結果
-
-	 */
-
-	public GetScheduleStatusResult getScheduleStatus(GetScheduleStatusRequest request) {
-
-	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/status";
-
-
-
-		HttpGet get = createHttpGet(
-				url,
-				credential,
-				ENDPOINT,
-				GetScheduleStatusRequest.Constant.MODULE,
-				GetScheduleStatusRequest.Constant.FUNCTION);
-        if(request.getRequestId() != null) {
-            get.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
-        }
-
-
-		return doRequest(get, GetScheduleStatusResult.class);
-
-	}
-
-
-	/**
 	 * トリガーを取得します<br>
 	 * <br>
 	 *
@@ -715,7 +836,6 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 
 		ObjectNode body = JsonNodeFactory.instance.objectNode()
 				.put("action", request.getAction());
-
         if(request.getTtl() != null) body.put("ttl", request.getTtl());
 		HttpPut put = createHttpPut(
 				Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/user/" + (request.getUserId() == null || request.getUserId().equals("") ? "null" : request.getUserId()) + "/trigger/" + (request.getTriggerName() == null || request.getTriggerName().equals("") ? "null" : request.getTriggerName()) + "",
@@ -730,107 +850,6 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 
 
 		return doRequest(put, PullTriggerResult.class);
-
-	}
-
-
-	/**
-	 * イベントマスターを更新します<br>
-	 * <br>
-	 *
-	 * @param request リクエストパラメータ
-
-	 * @return 結果
-
-	 */
-
-	public UpdateCurrentEventMasterResult updateCurrentEventMaster(UpdateCurrentEventMasterRequest request) {
-
-		ObjectNode body = JsonNodeFactory.instance.objectNode()
-				.put("settings", request.getSettings());
-
-		HttpPost post = createHttpPost(
-				Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/event/master",
-				credential,
-				ENDPOINT,
-				UpdateCurrentEventMasterRequest.Constant.MODULE,
-				UpdateCurrentEventMasterRequest.Constant.FUNCTION,
-				body.toString());
-        if(request.getRequestId() != null) {
-            post.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
-        }
-
-
-		return doRequest(post, UpdateCurrentEventMasterResult.class);
-
-	}
-
-
-	/**
-	 * イベントマスターを更新します<br>
-	 * <br>
-	 *
-	 * @param request リクエストパラメータ
-
-	 * @return 結果
-
-	 */
-
-	public UpdateEventMasterResult updateEventMaster(UpdateEventMasterRequest request) {
-
-		ObjectNode body = JsonNodeFactory.instance.objectNode()
-				.put("type", request.getType());
-
-        if(request.getMeta() != null) body.put("meta", request.getMeta());
-        if(request.getAbsoluteBegin() != null) body.put("absoluteBegin", request.getAbsoluteBegin());
-        if(request.getAbsoluteEnd() != null) body.put("absoluteEnd", request.getAbsoluteEnd());
-        if(request.getRelativeTriggerName() != null) body.put("relativeTriggerName", request.getRelativeTriggerName());
-        if(request.getRelativeSpan() != null) body.put("relativeSpan", request.getRelativeSpan());
-		HttpPut put = createHttpPut(
-				Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/master/event/" + (request.getEventName() == null || request.getEventName().equals("") ? "null" : request.getEventName()) + "",
-				credential,
-				ENDPOINT,
-				UpdateEventMasterRequest.Constant.MODULE,
-				UpdateEventMasterRequest.Constant.FUNCTION,
-				body.toString());
-        if(request.getRequestId() != null) {
-            put.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
-        }
-
-
-		return doRequest(put, UpdateEventMasterResult.class);
-
-	}
-
-
-	/**
-	 * スケジュールを更新します<br>
-	 * <br>
-	 *
-	 * @param request リクエストパラメータ
-
-	 * @return 結果
-
-	 */
-
-	public UpdateScheduleResult updateSchedule(UpdateScheduleRequest request) {
-
-		ObjectNode body = JsonNodeFactory.instance.objectNode();
-
-        if(request.getDescription() != null) body.put("description", request.getDescription());
-		HttpPut put = createHttpPut(
-				Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "",
-				credential,
-				ENDPOINT,
-				UpdateScheduleRequest.Constant.MODULE,
-				UpdateScheduleRequest.Constant.FUNCTION,
-				body.toString());
-        if(request.getRequestId() != null) {
-            put.setHeader("X-GS2-REQUEST-ID", request.getRequestId());
-        }
-
-
-		return doRequest(put, UpdateScheduleResult.class);
 
 	}
 
