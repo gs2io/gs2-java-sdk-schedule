@@ -16,9 +16,13 @@
 
 package io.gs2.schedule.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * トリガー
@@ -59,6 +63,17 @@ public class Trigger implements Serializable {
 	}
 
 	/**
+	 * ユーザIDを設定
+	 *
+	 * @param userId ユーザID
+	 * @return this
+	 */
+	public Trigger withUserId(String userId) {
+		this.userId = userId;
+		return this;
+	}
+
+	/**
 	 * トリガーIDを取得
 	 *
 	 * @return トリガーID
@@ -74,6 +89,17 @@ public class Trigger implements Serializable {
 	 */
 	public void setTriggerName(String triggerName) {
 		this.triggerName = triggerName;
+	}
+
+	/**
+	 * トリガーIDを設定
+	 *
+	 * @param triggerName トリガーID
+	 * @return this
+	 */
+	public Trigger withTriggerName(String triggerName) {
+		this.triggerName = triggerName;
+		return this;
 	}
 
 	/**
@@ -94,4 +120,26 @@ public class Trigger implements Serializable {
 		this.triggerAt = triggerAt;
 	}
 
+	/**
+	 * トリガーを引いた時間(エポック秒)を設定
+	 *
+	 * @param triggerAt トリガーを引いた時間(エポック秒)
+	 * @return this
+	 */
+	public Trigger withTriggerAt(Integer triggerAt) {
+		this.triggerAt = triggerAt;
+		return this;
+	}
+
+
+    public ObjectNode toJson() {
+
+		ObjectNode body = JsonNodeFactory.instance.objectNode()
+
+            .put("userId", this.getUserId())
+            .put("triggerName", this.getTriggerName())
+            .put("triggerAt", this.getTriggerAt());
+
+        return body;
+    }
 }

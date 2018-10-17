@@ -18,6 +18,7 @@ package io.gs2.schedule.control;
 
 import org.json.JSONObject;
 import java.util.List;
+import io.gs2.schedule.model.*;
 import io.gs2.schedule.Gs2Schedule;
 import io.gs2.control.Gs2BasicRequest;
 
@@ -37,8 +38,8 @@ public class DescribeEventByUserIdRequest extends Gs2BasicRequest<DescribeEventB
 	/** ユーザIDを指定します。 */
 	private String userId;
 
-	/** 取得するイベント名をカンマ区切りのリストで指定する */
-	private String eventNames;
+	/** 取得するイベント名のリスト */
+	private List<String> eventNames;
 
 
 	/**
@@ -100,30 +101,30 @@ public class DescribeEventByUserIdRequest extends Gs2BasicRequest<DescribeEventB
 	}
 
 	/**
-	 * 取得するイベント名をカンマ区切りのリストで指定するを取得
+	 * 取得するイベント名のリストを取得
 	 *
-	 * @return 取得するイベント名をカンマ区切りのリストで指定する
+	 * @return 取得するイベント名のリスト
 	 */
-	public String getEventNames() {
+	public List<String> getEventNames() {
 		return eventNames;
 	}
 
 	/**
-	 * 取得するイベント名をカンマ区切りのリストで指定するを設定
+	 * 取得するイベント名のリストを設定
 	 *
-	 * @param eventNames 取得するイベント名をカンマ区切りのリストで指定する
+	 * @param eventNames 取得するイベント名のリスト
 	 */
-	public void setEventNames(String eventNames) {
+	public void setEventNames(List<String> eventNames) {
 		this.eventNames = eventNames;
 	}
 
 	/**
-	 * 取得するイベント名をカンマ区切りのリストで指定するを設定
+	 * 取得するイベント名のリストを設定
 	 *
-	 * @param eventNames 取得するイベント名をカンマ区切りのリストで指定する
+	 * @param eventNames 取得するイベント名のリスト
 	 * @return this
 	 */
-	public DescribeEventByUserIdRequest withEventNames(String eventNames) {
+	public DescribeEventByUserIdRequest withEventNames(List<String> eventNames) {
 		setEventNames(eventNames);
 		return this;
 	}

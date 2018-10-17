@@ -16,9 +16,13 @@
 
 package io.gs2.schedule.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * イベントマスター
@@ -80,6 +84,17 @@ public class EventMaster implements Serializable {
 	}
 
 	/**
+	 * イベントマスターGRNを設定
+	 *
+	 * @param eventMasterId イベントマスターGRN
+	 * @return this
+	 */
+	public EventMaster withEventMasterId(String eventMasterId) {
+		this.eventMasterId = eventMasterId;
+		return this;
+	}
+
+	/**
 	 * イベントマスター名を取得
 	 *
 	 * @return イベントマスター名
@@ -95,6 +110,17 @@ public class EventMaster implements Serializable {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * イベントマスター名を設定
+	 *
+	 * @param name イベントマスター名
+	 * @return this
+	 */
+	public EventMaster withName(String name) {
+		this.name = name;
+		return this;
 	}
 
 	/**
@@ -116,6 +142,17 @@ public class EventMaster implements Serializable {
 	}
 
 	/**
+	 * メタデータを設定
+	 *
+	 * @param meta メタデータ
+	 * @return this
+	 */
+	public EventMaster withMeta(String meta) {
+		this.meta = meta;
+		return this;
+	}
+
+	/**
 	 * 期間を取得
 	 *
 	 * @return 期間
@@ -131,6 +168,17 @@ public class EventMaster implements Serializable {
 	 */
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	/**
+	 * 期間を設定
+	 *
+	 * @param type 期間
+	 * @return this
+	 */
+	public EventMaster withType(String type) {
+		this.type = type;
+		return this;
 	}
 
 	/**
@@ -152,6 +200,17 @@ public class EventMaster implements Serializable {
 	}
 
 	/**
+	 * 絶対時間を選択した場合の開始日時を設定
+	 *
+	 * @param absoluteBegin 絶対時間を選択した場合の開始日時
+	 * @return this
+	 */
+	public EventMaster withAbsoluteBegin(Integer absoluteBegin) {
+		this.absoluteBegin = absoluteBegin;
+		return this;
+	}
+
+	/**
 	 * 絶対時間を選択した場合の終了日時を取得
 	 *
 	 * @return 絶対時間を選択した場合の終了日時
@@ -167,6 +226,17 @@ public class EventMaster implements Serializable {
 	 */
 	public void setAbsoluteEnd(Integer absoluteEnd) {
 		this.absoluteEnd = absoluteEnd;
+	}
+
+	/**
+	 * 絶対時間を選択した場合の終了日時を設定
+	 *
+	 * @param absoluteEnd 絶対時間を選択した場合の終了日時
+	 * @return this
+	 */
+	public EventMaster withAbsoluteEnd(Integer absoluteEnd) {
+		this.absoluteEnd = absoluteEnd;
+		return this;
 	}
 
 	/**
@@ -188,6 +258,17 @@ public class EventMaster implements Serializable {
 	}
 
 	/**
+	 * 相対時間を選択した場合の開始トリガー名を設定
+	 *
+	 * @param relativeTriggerName 相対時間を選択した場合の開始トリガー名
+	 * @return this
+	 */
+	public EventMaster withRelativeTriggerName(String relativeTriggerName) {
+		this.relativeTriggerName = relativeTriggerName;
+		return this;
+	}
+
+	/**
 	 * 相対時間を選択した場合のトリガーを引いてからのイベント期間(分)を取得
 	 *
 	 * @return 相対時間を選択した場合のトリガーを引いてからのイベント期間(分)
@@ -203,6 +284,17 @@ public class EventMaster implements Serializable {
 	 */
 	public void setRelativeSpan(Integer relativeSpan) {
 		this.relativeSpan = relativeSpan;
+	}
+
+	/**
+	 * 相対時間を選択した場合のトリガーを引いてからのイベント期間(分)を設定
+	 *
+	 * @param relativeSpan 相対時間を選択した場合のトリガーを引いてからのイベント期間(分)
+	 * @return this
+	 */
+	public EventMaster withRelativeSpan(Integer relativeSpan) {
+		this.relativeSpan = relativeSpan;
+		return this;
 	}
 
 	/**
@@ -224,6 +316,17 @@ public class EventMaster implements Serializable {
 	}
 
 	/**
+	 * 作成日時(エポック秒)を設定
+	 *
+	 * @param createAt 作成日時(エポック秒)
+	 * @return this
+	 */
+	public EventMaster withCreateAt(Integer createAt) {
+		this.createAt = createAt;
+		return this;
+	}
+
+	/**
 	 * 最終更新日時(エポック秒)を取得
 	 *
 	 * @return 最終更新日時(エポック秒)
@@ -241,4 +344,33 @@ public class EventMaster implements Serializable {
 		this.updateAt = updateAt;
 	}
 
+	/**
+	 * 最終更新日時(エポック秒)を設定
+	 *
+	 * @param updateAt 最終更新日時(エポック秒)
+	 * @return this
+	 */
+	public EventMaster withUpdateAt(Integer updateAt) {
+		this.updateAt = updateAt;
+		return this;
+	}
+
+
+    public ObjectNode toJson() {
+
+		ObjectNode body = JsonNodeFactory.instance.objectNode()
+
+            .put("eventMasterId", this.getEventMasterId())
+            .put("name", this.getName())
+            .put("meta", this.getMeta())
+            .put("type", this.getType())
+            .put("absoluteBegin", this.getAbsoluteBegin())
+            .put("absoluteEnd", this.getAbsoluteEnd())
+            .put("relativeTriggerName", this.getRelativeTriggerName())
+            .put("relativeSpan", this.getRelativeSpan())
+            .put("createAt", this.getCreateAt())
+            .put("updateAt", this.getUpdateAt());
+
+        return body;
+    }
 }

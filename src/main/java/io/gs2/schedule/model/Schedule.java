@@ -16,9 +16,13 @@
 
 package io.gs2.schedule.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * スケジュール
@@ -68,6 +72,17 @@ public class Schedule implements Serializable {
 	}
 
 	/**
+	 * スケジュールGRNを設定
+	 *
+	 * @param scheduleId スケジュールGRN
+	 * @return this
+	 */
+	public Schedule withScheduleId(String scheduleId) {
+		this.scheduleId = scheduleId;
+		return this;
+	}
+
+	/**
 	 * オーナーIDを取得
 	 *
 	 * @return オーナーID
@@ -83,6 +98,17 @@ public class Schedule implements Serializable {
 	 */
 	public void setOwnerId(String ownerId) {
 		this.ownerId = ownerId;
+	}
+
+	/**
+	 * オーナーIDを設定
+	 *
+	 * @param ownerId オーナーID
+	 * @return this
+	 */
+	public Schedule withOwnerId(String ownerId) {
+		this.ownerId = ownerId;
+		return this;
 	}
 
 	/**
@@ -104,6 +130,17 @@ public class Schedule implements Serializable {
 	}
 
 	/**
+	 * スケジュール名を設定
+	 *
+	 * @param name スケジュール名
+	 * @return this
+	 */
+	public Schedule withName(String name) {
+		this.name = name;
+		return this;
+	}
+
+	/**
 	 * 説明文を取得
 	 *
 	 * @return 説明文
@@ -119,6 +156,17 @@ public class Schedule implements Serializable {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * 説明文を設定
+	 *
+	 * @param description 説明文
+	 * @return this
+	 */
+	public Schedule withDescription(String description) {
+		this.description = description;
+		return this;
 	}
 
 	/**
@@ -140,6 +188,17 @@ public class Schedule implements Serializable {
 	}
 
 	/**
+	 * 作成日時(エポック秒)を設定
+	 *
+	 * @param createAt 作成日時(エポック秒)
+	 * @return this
+	 */
+	public Schedule withCreateAt(Integer createAt) {
+		this.createAt = createAt;
+		return this;
+	}
+
+	/**
 	 * 最終更新日時(エポック秒)を取得
 	 *
 	 * @return 最終更新日時(エポック秒)
@@ -157,4 +216,29 @@ public class Schedule implements Serializable {
 		this.updateAt = updateAt;
 	}
 
+	/**
+	 * 最終更新日時(エポック秒)を設定
+	 *
+	 * @param updateAt 最終更新日時(エポック秒)
+	 * @return this
+	 */
+	public Schedule withUpdateAt(Integer updateAt) {
+		this.updateAt = updateAt;
+		return this;
+	}
+
+
+    public ObjectNode toJson() {
+
+		ObjectNode body = JsonNodeFactory.instance.objectNode()
+
+            .put("scheduleId", this.getScheduleId())
+            .put("ownerId", this.getOwnerId())
+            .put("name", this.getName())
+            .put("description", this.getDescription())
+            .put("createAt", this.getCreateAt())
+            .put("updateAt", this.getUpdateAt());
+
+        return body;
+    }
 }
