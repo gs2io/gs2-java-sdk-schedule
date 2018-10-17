@@ -18,6 +18,7 @@ package io.gs2.schedule.control;
 
 import org.json.JSONObject;
 import java.util.List;
+import io.gs2.schedule.model.*;
 import io.gs2.schedule.Gs2Schedule;
 import io.gs2.control.Gs2BasicRequest;
 

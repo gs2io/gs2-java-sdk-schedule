@@ -18,7 +18,6 @@ package io.gs2.schedule;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import io.gs2.model.Region;
 import io.gs2.util.EncodingUtil;
@@ -32,6 +31,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import io.gs2.AbstractGs2Client;
 import io.gs2.Gs2Constant;
@@ -75,6 +75,7 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 	 */
 	public Gs2ScheduleClient(IGs2Credential credential, String region) {
 		super(credential, region);
+
 	}
 
 
@@ -91,7 +92,6 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 	public GetCurrentEventMasterResult getCurrentEventMaster(GetCurrentEventMasterRequest request) {
 
 	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/event/master";
-
 
 
 		HttpGet get = createHttpGet(
@@ -193,7 +193,6 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/master/event/" + (request.getEventName() == null || request.getEventName().equals("") ? "null" : request.getEventName()) + "";
 
 
-
 		HttpDelete delete = createHttpDelete(
 				url,
 				credential,
@@ -228,7 +227,6 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
         if(request.getPageToken() != null) queryString.add(new BasicNameValuePair("pageToken", String.valueOf(request.getPageToken())));
         if(request.getLimit() != null) queryString.add(new BasicNameValuePair("limit", String.valueOf(request.getLimit())));
 
-
 		if(queryString.size() > 0) {
 			url += "?" + URLEncodedUtils.format(queryString, "UTF-8");
 		}
@@ -261,7 +259,6 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 	public GetEventMasterResult getEventMaster(GetEventMasterRequest request) {
 
 	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/master/event/" + (request.getEventName() == null || request.getEventName().equals("") ? "null" : request.getEventName()) + "";
-
 
 
 		HttpGet get = createHttpGet(
@@ -331,8 +328,7 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/event";
 
         List<NameValuePair> queryString = new ArrayList<>();
-        if(request.getEventNames() != null) queryString.add(new BasicNameValuePair("eventNames", String.valueOf(request.getEventNames())));
-
+        if(request.getEventNames() != null) queryString.add(new BasicNameValuePair("eventNames", toString(request.getEventNames())));
 
 		if(queryString.size() > 0) {
 			url += "?" + URLEncodedUtils.format(queryString, "UTF-8");
@@ -369,8 +365,7 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/event/user/" + (request.getUserId() == null || request.getUserId().equals("") ? "null" : request.getUserId()) + "";
 
         List<NameValuePair> queryString = new ArrayList<>();
-        if(request.getEventNames() != null) queryString.add(new BasicNameValuePair("eventNames", String.valueOf(request.getEventNames())));
-
+        if(request.getEventNames() != null) queryString.add(new BasicNameValuePair("eventNames", toString(request.getEventNames())));
 
 		if(queryString.size() > 0) {
 			url += "?" + URLEncodedUtils.format(queryString, "UTF-8");
@@ -406,7 +401,6 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/event/" + (request.getEventName() == null || request.getEventName().equals("") ? "null" : request.getEventName()) + "";
 
 
-
 		HttpGet get = createHttpGet(
 				url,
 				credential,
@@ -439,7 +433,6 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/event/" + (request.getEventName() == null || request.getEventName().equals("") ? "null" : request.getEventName()) + "/user/" + (request.getUserId() == null || request.getUserId().equals("") ? "null" : request.getUserId()) + "";
 
 
-
 		HttpGet get = createHttpGet(
 				url,
 				credential,
@@ -469,7 +462,6 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 	public ExportMasterResult exportMaster(ExportMasterRequest request) {
 
 	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/master";
-
 
 
 		HttpGet get = createHttpGet(
@@ -534,7 +526,6 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "";
 
 
-
 		HttpDelete delete = createHttpDelete(
 				url,
 				credential,
@@ -568,7 +559,6 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
         List<NameValuePair> queryString = new ArrayList<>();
         if(request.getPageToken() != null) queryString.add(new BasicNameValuePair("pageToken", String.valueOf(request.getPageToken())));
         if(request.getLimit() != null) queryString.add(new BasicNameValuePair("limit", String.valueOf(request.getLimit())));
-
 
 		if(queryString.size() > 0) {
 			url += "?" + URLEncodedUtils.format(queryString, "UTF-8");
@@ -604,7 +594,6 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "";
 
 
-
 		HttpGet get = createHttpGet(
 				url,
 				credential,
@@ -634,7 +623,6 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 	public GetScheduleStatusResult getScheduleStatus(GetScheduleStatusRequest request) {
 
 	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/status";
-
 
 
 		HttpGet get = createHttpGet(
@@ -697,7 +685,6 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/user/" + (request.getUserId() == null || request.getUserId().equals("") ? "null" : request.getUserId()) + "/trigger/" + (request.getTriggerName() == null || request.getTriggerName().equals("") ? "null" : request.getTriggerName()) + "";
 
 
-
 		HttpDelete delete = createHttpDelete(
 				url,
 				credential,
@@ -731,7 +718,6 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
         List<NameValuePair> queryString = new ArrayList<>();
         if(request.getPageToken() != null) queryString.add(new BasicNameValuePair("pageToken", String.valueOf(request.getPageToken())));
         if(request.getLimit() != null) queryString.add(new BasicNameValuePair("limit", String.valueOf(request.getLimit())));
-
 
 		if(queryString.size() > 0) {
 			url += "?" + URLEncodedUtils.format(queryString, "UTF-8");
@@ -770,7 +756,6 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
         if(request.getPageToken() != null) queryString.add(new BasicNameValuePair("pageToken", String.valueOf(request.getPageToken())));
         if(request.getLimit() != null) queryString.add(new BasicNameValuePair("limit", String.valueOf(request.getLimit())));
 
-
 		if(queryString.size() > 0) {
 			url += "?" + URLEncodedUtils.format(queryString, "UTF-8");
 		}
@@ -803,7 +788,6 @@ public class Gs2ScheduleClient extends AbstractGs2Client<Gs2ScheduleClient> {
 	public GetTriggerResult getTrigger(GetTriggerRequest request) {
 
 	    String url = Gs2Constant.ENDPOINT_HOST + "/schedule/" + (request.getScheduleName() == null || request.getScheduleName().equals("") ? "null" : request.getScheduleName()) + "/user/" + (request.getUserId() == null || request.getUserId().equals("") ? "null" : request.getUserId()) + "/trigger/" + (request.getTriggerName() == null || request.getTriggerName().equals("") ? "null" : request.getTriggerName()) + "";
-
 
 
 		HttpGet get = createHttpGet(

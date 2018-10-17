@@ -16,9 +16,13 @@
 
 package io.gs2.schedule.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * イベント
@@ -62,6 +66,17 @@ public class Event implements Serializable {
 	}
 
 	/**
+	 * イベント名を設定
+	 *
+	 * @param name イベント名
+	 * @return this
+	 */
+	public Event withName(String name) {
+		this.name = name;
+		return this;
+	}
+
+	/**
 	 * メタデータを取得
 	 *
 	 * @return メタデータ
@@ -77,6 +92,17 @@ public class Event implements Serializable {
 	 */
 	public void setMeta(String meta) {
 		this.meta = meta;
+	}
+
+	/**
+	 * メタデータを設定
+	 *
+	 * @param meta メタデータ
+	 * @return this
+	 */
+	public Event withMeta(String meta) {
+		this.meta = meta;
+		return this;
 	}
 
 	/**
@@ -98,6 +124,17 @@ public class Event implements Serializable {
 	}
 
 	/**
+	 * 開始日時を設定
+	 *
+	 * @param begin 開始日時
+	 * @return this
+	 */
+	public Event withBegin(Integer begin) {
+		this.begin = begin;
+		return this;
+	}
+
+	/**
 	 * 終了日時を取得
 	 *
 	 * @return 終了日時
@@ -115,4 +152,27 @@ public class Event implements Serializable {
 		this.end = end;
 	}
 
+	/**
+	 * 終了日時を設定
+	 *
+	 * @param end 終了日時
+	 * @return this
+	 */
+	public Event withEnd(Integer end) {
+		this.end = end;
+		return this;
+	}
+
+
+    public ObjectNode toJson() {
+
+		ObjectNode body = JsonNodeFactory.instance.objectNode()
+
+            .put("name", this.getName())
+            .put("meta", this.getMeta())
+            .put("begin", this.getBegin())
+            .put("end", this.getEnd());
+
+        return body;
+    }
 }
